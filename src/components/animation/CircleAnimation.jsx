@@ -2,8 +2,9 @@ import React from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 
-const CircleAnimation = ({ startOffset, yPos, imageSrc, wipeColor, borderColor, align = 'left', isMobileStatic = false }) => {
-  const { scrollY } = useScroll();
+const CircleAnimation = ({ scrollY: propScrollY, startOffset, yPos, imageSrc, wipeColor, borderColor, align = 'left' }) => {
+  const { scrollY: windowScrollY } = useScroll();
+  const scrollY = propScrollY || windowScrollY;
   const smoothScrollY = useSpring(scrollY, { stiffness: 50, damping: 15, mass: 1 });
 
   const activePhaseLength = 900; 
@@ -26,48 +27,19 @@ const CircleAnimation = ({ startOffset, yPos, imageSrc, wipeColor, borderColor, 
 
   const scale = useTransform(localScrollY, [0, shrinkEnd], [1, 0.7], { clamp: true });
   const opacity = useTransform(localScrollY, [0, shrinkEnd], [1, 0.7], { clamp: true });
-  const xTarget = align === 'left' ? -15 : 15;
+  const xTarget = align === 'left' ? -25 : 25;
   const translateX = useTransform(localScrollY, [moveStart, moveEnd], [0, xTarget], { clamp: true });
   const colorLeft = useTransform(localScrollY, [wipeStart, wipeEnd], ['100%', '-150%'], { clamp: true });
   const colorOpacity = useTransform(localScrollY, [wipeStart, wipeStart + 100], [0, 1], { clamp: true });
 
-  // Layout Classes based on mode
-  const wrapperClass = isMobileStatic
-    ? "relative w-[120px] h-[120px] rounded-full overflow-hidden z-10 flex-shrink-0"
-    : "fixed left-1/2 w-[240.5px] h-[240.5px] rounded-full overflow-hidden pointer-events-none z-10 top-auto hidden md:block";
-
-  // Styles Logic
-  // Mobile: Uses variants for "Slide In" effect
-  // Desktop: Uses scroll-driven transforms
-  const desktopStyle = {
-    y: '-50%',
-    left: colorLeft,
-    opacity: colorOpacity,
-    backgroundImage: `url(${imageSrc})`,
-    backgroundColor: wipeColor, 
-    boxShadow: `0 0 20px rgba(0,0,0,0.5)`,
-    filter: 'contrast(110%) sepia(10%)'
-  };
-
-  const mobileStyle = {
-    y: '-50%',
-    backgroundImage: `url(${imageSrc})`,
-    backgroundColor: wipeColor, 
-    boxShadow: `0 0 20px rgba(0,0,0,0.5)`,
-    filter: 'contrast(110%) sepia(10%)'
-  };
-
-  const mobileVariants = {
-    hidden: { left: '120%', opacity: 0, x: '-50%' },
-    visible: { left: '50%', opacity: 1, x: '-50%', transition: { duration: 0.8, ease: "circOut" } }
-  };
+  // Layout Classes
+  const wrapperClass = "fixed left-1/2 w-[240.5px] h-[240.5px] rounded-full overflow-hidden pointer-events-none z-10 top-auto hidden md:block";
 
   return (
     <motion.div 
       className={wrapperClass}
-      style={isMobileStatic ? {} : {
+      style={{
         top: `${yPos}%`,
-        '--y-pos': `${yPos}%`,
         x: '-50%',
         y: '-50%',
         scale,
@@ -81,17 +53,16 @@ const CircleAnimation = ({ startOffset, yPos, imageSrc, wipeColor, borderColor, 
       />
       
       <motion.div
-        className="absolute top-1/2 rounded-full w-[500px] h-[500px] md:w-[800px] md:h-[800px] z-[11] bg-cover bg-center"
-        // Apply Mobile "Slide In" Animation props only if in mobile mode
-        {...(isMobileStatic ? {
-          initial: "hidden",
-          whileInView: "visible",
-          viewport: { once: true, amount: 0.5 },
-          variants: mobileVariants,
-          style: mobileStyle
-        } : {
-          style: desktopStyle
-        })}
+        className="absolute top-1/2 rounded-full w-[800px] h-[800px] z-[11] bg-cover bg-center"
+        style={{
+          y: '-50%',
+          left: colorLeft,
+          opacity: colorOpacity,
+          backgroundImage: `url(${imageSrc})`,
+          backgroundColor: wipeColor, 
+          boxShadow: `0 0 30px rgba(0,0,0,0.5)`,
+          filter: 'contrast(110%) sepia(10%)'
+        }}
       />
     </motion.div>
   );

@@ -1,8 +1,9 @@
 import useIsMobile from "../../hooks/useIsMobile";
 import CircleAnimation from "../animation/CircleAnimation";
-import CircleAnimationMobile from "../animation/CircleAnimationMobile";
 import TextBlock from "../animation/TextBlock";
-import TextBlockMobile from "../animation/TextBlockMobile";
+import MobileCircleAnimation from "../animation/MobileCircleAnimation";
+import MobileTextBlock from "../animation/MobileTextBlock";
+
 
 
 
@@ -13,7 +14,7 @@ const Pricing = ({ content, theme, config }) => {
   if (isMobile) {
     return (
       <>
-        <CircleAnimationMobile 
+        <MobileCircleAnimation 
           scrollY={config.scrollY}
           animateRange={config.animateRange}
           scrollRange={config.scrollRange}
@@ -23,7 +24,7 @@ const Pricing = ({ content, theme, config }) => {
           borderColor={theme.borderColor}
           align={config.align}
         />
-        <TextBlockMobile 
+        <MobileTextBlock 
           scrollY={config.scrollY}
           content={content} 
           animateRange={config.animateRange}
@@ -45,6 +46,9 @@ const Pricing = ({ content, theme, config }) => {
         imageSrc={theme.imageSrc}
         wipeColor={theme.wipeColor} 
         borderColor={theme.borderColor}
+        animateRange={config.animateRange}
+        scrollRange={config.scrollRange}
+        scrollOutput={config.scrollOutput}
       />
       <TextBlock 
         scrollY={config.scrollY}
@@ -53,11 +57,12 @@ const Pricing = ({ content, theme, config }) => {
         topPos={config.yPos} 
         align={config.align}
         accentColor={theme.accentColor}
+        animateRange={config.animateRange}
+        scrollRange={config.scrollRange}
+        scrollOutput={config.scrollOutput}
       />
     </>
   );
 };
 
-
-
-export default Pricing
+export default Pricing;

@@ -1,11 +1,11 @@
-import { useScroll } from "framer-motion";
-import useIsMobile from "../../hooks/useIsMobile";
-import CircleAnimation from "../animation/CircleAnimation";
-import PricingSection from "../sections/Pricing";
-import { useRef } from "react";
+import React, { useRef, useState, useEffect } from 'react';
+import { useScroll } from 'framer-motion';
+import useIsMobile from '../../hooks/useIsMobile';
+import PricingMobile from '../sections/PricingMobile';
+import Pricing from '../sections/Pricing';
 
-
-
+// NOTE: Import Desktop components and useIsMobile hook if you are conditionally rendering here
+// For this file I am focusing on setting up the data and structure as requested.
 
 const Home = () => {
   const containerRef = useRef(null);
@@ -16,11 +16,11 @@ const Home = () => {
   const PHASE_1_END = 500;
   const PHASE_2_END = 1000;
   const PHASE_3_END = 1500;
-  const TOTAL_HEIGHT = isMobile ? 3000 : 2500; // Desktop doesn't need as much height since items overlap viewports
+  const TOTAL_HEIGHT = isMobile ? 3000 : 4500; 
 
   const content1 = {
-    title: "Single Project",
-    price: "₹5,490", tagline: "One-Time", accentColor: "bg-[#FF9933]", accentText: "text-[#FF9933]",
+    title: "Per Project",
+    price: "₹5,490", tagline: "Single Engagement", accentColor: "bg-[#FF9933]", accentText: "text-[#FF9933]",
     details: ["Homepage + 4 Inner Pages", "Full Responsive Design", "Weekly Support Call", "SEO Basics Included"],
     delivery: "3-4 Weeks"
   };
@@ -33,6 +33,8 @@ const Home = () => {
   };
 
   // Config Objects
+  // Desktop uses fixed positioning, so 'startOffset' is key. Mobile uses 'scrollRange'.
+  // We provide all props to be safe.
   const section1Config = {
     // Mobile Props
     scrollY, animateRange: [0, PHASE_1_END], scrollRange: [PHASE_1_END, PHASE_2_END], scrollOutput: ['30%', '-100%'],
@@ -43,8 +45,12 @@ const Home = () => {
 
   const section2Config = {
     // Mobile Props
-    scrollY, animateRange: [PHASE_2_END, PHASE_3_END], scrollRange: [PHASE_1_END, PHASE_2_END], scrollOutput: ['150%', '30%'],
-    // Desktop Props (Sequential logic handled by startOffset)
+    scrollY, 
+    animateRange: [PHASE_2_END, PHASE_3_END], // 1000 -> 1500
+    // FIX: Update scrollRange to match animateRange so it stays visible while animating
+    scrollRange: [PHASE_2_END, PHASE_3_END],  // Was [PHASE_1_END, PHASE_2_END]
+    scrollOutput: ['150%', '30%'],
+    // ... existing desktop props ...
     startOffset: 1000, yPos: 75, 
     align: "right"
   };
@@ -62,14 +68,20 @@ const Home = () => {
         <div className="w-[1px] h-12 bg-white/20 mx-auto mt-4"></div>
       </div>
 
-      <PricingSection config={section1Config} content={content1}
+      {/* SECTION 1 */}
+      <Pricing 
+        config={section1Config}
+        content={content1}
         theme={{
           imageSrc: "https://images.unsplash.com/photo-1579912891470-947092304c9b?q=80&w=2576&auto=format&fit=crop",
           wipeColor: "#FF9933", borderColor: "border-[#FF9933]/30", accentColor: "bg-[#FF9933]", accentText: "text-[#FF9933]"
         }}
       />
 
-      <PricingSection config={section2Config} content={content2}
+      {/* SECTION 2 */}
+      <Pricing 
+        config={section2Config}
+        content={content2}
         theme={{
           imageSrc: "https://images.unsplash.com/photo-1595590424283-b8f17842773f?q=80&w=2670&auto=format&fit=crop",
           wipeColor: "#138808", borderColor: "border-[#138808]/30", accentColor: "bg-[#138808]", accentText: "text-[#138808]"

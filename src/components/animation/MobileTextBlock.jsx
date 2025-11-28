@@ -1,10 +1,10 @@
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import PriceDisplay from "../ui/PriceDisplay";
-import DetailList from "../ui/DetailList";
-import TacticalButton from "../ui/TacticalButton";
+import React from 'react';
+import { motion, useTransform, useSpring } from 'framer-motion';
+import TacticalButton from '../ui/TacticalButton';
+import PriceDisplay from '../ui/PriceDisplay';
+import DetailList from '../ui/DetailList';
 
-
-const TextBlockMobile = ({ scrollY, content, animateRange, scrollRange, scrollOutput, align = 'left' }) => {
+const MobileTextBlock = ({ scrollY, content, animateRange, scrollRange, scrollOutput, align = 'left' }) => {
   const smoothScrollY = useSpring(scrollY, { stiffness: 50, damping: 15, mass: 1 });
   const [animStart, animEnd] = animateRange;
 
@@ -13,8 +13,7 @@ const TextBlockMobile = ({ scrollY, content, animateRange, scrollRange, scrollOu
   const topPosition = useTransform(smoothScrollY, scrollRange, scrollOutput, { clamp: true });
   const containerOpacity = useTransform(smoothScrollY, [scrollRange[1] - 100, scrollRange[1]], [1, scrollOutput[1] === '-100%' ? 0 : 1]);
 
-  // Mobile Shift Logic
-  const priceXVal = align === 'left' ? 85 : -85; 
+  const priceXVal = align === 'left' ? 85 : -85;
   const priceY = useTransform(smoothScrollY, [animStart + 150, animStart + 350], [0, -115], { clamp: true });
   const priceX = useTransform(smoothScrollY, [animStart + 150, animStart + 350], ["0px", `${priceXVal}px`], { clamp: true });
   const detailsY = useTransform(smoothScrollY, [animStart + 150, animStart + 350], [20, -70], { clamp: true });
@@ -22,17 +21,29 @@ const TextBlockMobile = ({ scrollY, content, animateRange, scrollRange, scrollOu
   const accentColorClass = content.accentColor || "bg-white";
   const buttonBgClass = content.accentColor || "bg-neutral-700";
 
+  // ANIMATION FIX FOR MOBILE LINE
+  // Instead of x: -100%, we use opacity to make it "fade in" as requested
+  // We'll map it to the header opacity for sync
+  const lineOpacity = headerOpacity;
+
   return (
     <motion.div
-      className="absolute left-1/2 -translate-x-1/2 w-[85%] text-center pointer-events-none z-30 h-0 overflow-visible flex flex-col items-center md:hidden"
-      style={{ top: topPosition, opacity: containerOpacity, translateX: '-50%' }} 
+      className="absolute left-1/2 -translate-x-1/2 w-[85%] text-center pointer-events-none z-50 h-0 overflow-visible flex flex-col items-center md:hidden"
+      style={{ top: topPosition, opacity: containerOpacity, translateX: '-50%' }}
     >
       <div className="absolute bottom-0 mb-[95px] w-full z-20 overflow-hidden px-[2px] flex flex-col items-center">
-        <motion.h2 className="text-3xl font-bold text-white mb-3 tracking-tight font-sans" style={{ opacity: headerOpacity }}>
+        <motion.h2
+          className="text-3xl font-bold text-white mb-3 tracking-tight font-sans"
+          style={{ opacity: headerOpacity }}
+        >
           {content.title}
         </motion.h2>
         <div className="w-full h-[1px] overflow-hidden relative">
-           <motion.div className={`w-full h-full ${accentColorClass} absolute top-0 left-0`} style={{ x: 0 }} />
+          {/* FADE IN LINE FIX */}
+          <motion.div
+            className={`w-full h-full ${accentColorClass} absolute top-0 left-0`}
+            style={{ opacity: lineOpacity }}
+          />
         </div>
       </div>
 
@@ -45,13 +56,13 @@ const TextBlockMobile = ({ scrollY, content, animateRange, scrollRange, scrollOu
           <motion.div className="w-full" style={{ y: detailsY }}>
             <DetailList details={content.details} accentColorClass={accentColorClass} align={align === 'left' ? 'left' : 'right'} />
             <div className="flex items-center justify-between gap-4 mt-4">
-                 <div className="text-left">
-                    <div className="text-[9px] text-neutral-400 uppercase tracking-widest font-bold">Duration</div>
-                    <div className="text-sm font-medium text-white font-sans">{content.delivery}</div>
-                </div>
-                 <div className="flex-1 max-w-[200px] pointer-events-auto">
-                     <TacticalButton text="Get Started" accentColor={buttonBgClass} align={align === 'left' ? 'right' : 'left'} />
-                 </div>
+              <div className="text-left">
+                <div className="text-[9px] text-neutral-400 uppercase tracking-widest font-bold">Duration</div>
+                <div className="text-sm font-medium text-white font-sans">{content.delivery}</div>
+              </div>
+              <div className="flex-1 max-w-[200px] pointer-events-auto">
+                <TacticalButton text="Get Started" accentColor={buttonBgClass} align={align === 'left' ? 'right' : 'left'} />
+              </div>
             </div>
           </motion.div>
         </div>
@@ -60,6 +71,4 @@ const TextBlockMobile = ({ scrollY, content, animateRange, scrollRange, scrollOu
   );
 };
 
-
-
-export default TextBlockMobile; 
+export default MobileTextBlock;

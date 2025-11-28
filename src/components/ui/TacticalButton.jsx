@@ -6,7 +6,7 @@ const TacticalButton = ({ text, accentColor, align = 'left', onClick }) => {
     <button 
       onClick={onClick}
       className={`
-        mt-6 md:mt-10 group flex items-center justify-between w-full 
+        mt-6 md:mt-8 group flex items-center justify-between w-full 
         px-6 md:px-8 py-4 rounded-full 
         ${bgClass} text-white 
         shadow-lg shadow-black/40 hover:brightness-110 hover:shadow-xl hover:-translate-y-0.5

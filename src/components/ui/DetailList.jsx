@@ -1,7 +1,7 @@
 import React from 'react';
 
 const DetailList = ({ details, accentColorClass, align = 'left' }) => (
-  <ul className="space-y-3 md:space-y-4 list-none p-0">
+  <ul className="space-y-[2px] md:space-y-3 list-none p-0 my-4">
     {details.map((detail, index) => (
       <li 
         key={index} 
