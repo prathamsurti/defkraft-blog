@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Inter:wght@300;400;500;600&family=Courier+Prime&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@import "tailwindcss";
+
+/* ============================================
+   ASTRA-STYLE DESIGN SYSTEM
+   DefKraft Dark Theme with Military Colors
+   ============================================ */
+
+@theme {
+  /* Color Palette */
+  --color-background: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-elevated: #1a1a1a;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(255, 255, 255, 0.15);
+  
+  /* Accent Colors - Military Tri-Color */
+  --color-accent-olive: #606C38;
+  --color-accent-olive-light: #7a8850;
+  --color-accent-red: #A31621;
+  --color-accent-red-light: #c4232e;
+  --color-accent-gold: #C5A059;
+  --color-accent-gold-light: #d4b678;
+  
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e0e0e0;
+  --color-text-muted: #888888;
+  --color-text-subtle: #555555;
+  
+  /* Legacy Colors (for backward compatibility) */
+  --color-army-olive: #3A4A35;
+  --color-army-highlight: #606C38;
+  --color-shield-red: #A31621;
+  --color-shield-gold: #C5A059;
+  --color-soft-white: #Eaeaea;
+  --color-paper-dark: #1a1a18;
+  --color-paper-light: #F5F5F0;
+  --color-ink-black: #111111;
+
+  /* Typography */
+  --font-family-sans: 'Inter', sans-serif;
+  --font-family-display: 'Oswald', sans-serif;
+  --font-family-mono: 'Courier Prime', monospace;
+
+  /* Animations */
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 60s linear infinite;
+  --animate-fade-in-up: fadeInUp 1s ease-out forwards;
+
+  /* Transitions */
+  --transition-colors: background-color 0.8s ease, color 0.8s ease;
+  --transition-theme: 700ms;
+
+  --keyframes-fadeInUp: {
+    0%: { opacity: 0; transform: translateY(20px); }
+    100%: { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+}
+
+/* ============================================
+   GRAIN OVERLAY
+   ============================================ */
+
+.bg-grain {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://www.transparenttextures.com/patterns/noise.png");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ============================================
+   HERO SECTION STYLES
+   ============================================ */
+
+.hero-title {
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 1.1;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  opacity: 0.3;
+  object-fit: cover;
+  z-index: -1;
+  filter: grayscale(100%) sepia(10%) contrast(1.1);
+  transition: opacity 0.8s ease;
+}
+
+/* Grid Lines */
+.grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+.grid-left { left: 6rem; }
+.grid-right { right: 6rem; }
+
+@media (max-width: 768px) {
+  .grid-left { left: 1.5rem; }
+  .grid-right { right: 1.5rem; }
+}
+
+/* ============================================
+   REVEAL ANIMATIONS (Mobile + Desktop)
+   ============================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.delay-100 { transition-delay: 0.1s; }
+.reveal.delay-200 { transition-delay: 0.2s; }
+.reveal.delay-300 { transition-delay: 0.3s; }
+.reveal.delay-400 { transition-delay: 0.4s; }
+.reveal.delay-500 { transition-delay: 0.5s; }
+
+/* Stagger animation for list items */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.reveal-stagger.active > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-stagger.active > *:nth-child(1) { transition-delay: 0.1s; }
+.reveal-stagger.active > *:nth-child(2) { transition-delay: 0.2s; }
+.reveal-stagger.active > *:nth-child(3) { transition-delay: 0.3s; }
+.reveal-stagger.active > *:nth-child(4) { transition-delay: 0.4s; }
+.reveal-stagger.active > *:nth-child(5) { transition-delay: 0.5s; }
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn-tactical {
+  background: linear-gradient(to bottom, #A31621, #800e16);
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  padding: 1rem 2.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-tactical:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(163, 22, 33, 0.3);
+}
+
+.btn-olive {
+  background: linear-gradient(to bottom, #606C38, #4a5430);
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  padding: 1rem 2.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+}
+
+.btn-olive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(96, 108, 56, 0.3);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  font-size: 0.7rem;
+  padding: 0.875rem 2rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-accent-gold);
+  background: rgba(197, 160, 89, 0.1);
+  color: var(--color-accent-gold);
+}
+
+/* ============================================
+   SECTION STYLES
+   ============================================ */
+
+.section {
+  position: relative;
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 8rem 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding: 10rem 6rem;
+  }
+}
+
+.section-title {
+  font-family: var(--font-family-display);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.section-number {
+  font-family: var(--font-family-mono);
+  font-size: 0.75rem;
+  color: var(--color-accent-gold);
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   CARD STYLES
+   ============================================ */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.card:hover {
+  border-color: var(--color-border-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.card-glass {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+/* ============================================
+   STAT COUNTER STYLES
+   ============================================ */
+
+.stat-number {
+  font-family: var(--font-family-display);
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 700;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff 0%, #888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-family: var(--font-family-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   MARQUEE ANIMATION
+   ============================================ */
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: flex;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-content > * {
+  flex-shrink: 0;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   ACCORDION STYLES
+   ============================================ */
+
+.accordion-item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.accordion-header:hover {
+  color: var(--color-accent-gold);
+}
+
+.accordion-icon {
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.open .accordion-icon {
+  transform: rotate(45deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.accordion-item.open .accordion-content {
+  max-height: 500px;
+}
+
+/* ============================================
+   SEAL ROTATION
+   ============================================ */
+
+.seal-rotate {
+  animation: spin 30s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-elevated);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-subtle);
+}
